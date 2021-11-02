@@ -8,80 +8,70 @@ class GeneralNavigation extends Turtle {
     this.scene = scene;
   }
 
-  produceString(atom, ruleTerminal, rule, order) {
+  produceString(atom, map, order) {
     let atomString = atom;
     let modifiedString = [];
     for (let i = 0; i < order; i++) {
       modifiedString = []
       for (let j = 0; j < atomString.length; j++) {
-
-        switch (atomString[j]) {
-          case ruleTerminal:
-            modifiedString.push(rule);
-            break;
-          default:
-            modifiedString.push(atomString[j])
-            break;
+        if(map[atomString[j]]){
+          modifiedString.push(map[atomString[j]]);
+        } else {
+          modifiedString.push(atomString[j])
         }
       }
       atomString = modifiedString.join("")
     }
     return modifiedString.join("");
   }
+
+  turnLeft(angle){
+    this.CD += angle
+  }
+  turnRight(angle){
+    this.CD -= angle;
+  }
+
   drawStringThroughProducedString(string, turnAngle) {
-    let forward = 0;
-    let point, initAngle;
-    point = new THREE.Vector2(0, 0);
-    initAngle = 0;
-    t = new Turtle(point, initAngle);
-    console.log("drawnString >>>", this.drawnString);
+    let forward = 1
+    console.log("drawnString >>>", this.CD);
     for (let char of string) {
       switch (char.toLowerCase()) {
         case "f":
-          forward++;
-          t.forward(forward, true);
+          this.forward(forward, true);
           break;
         case "+":
-          t.turn(turnAngle);
-          forward = 0;
+          this.turnLeft(turnAngle);
           break;
         case "-":
-          t.turn(-turnAngle);
-          forward = 0;
+          this.turnRight(turnAngle);
           break;
         default:
           break;
       }
     }
-    this.scene.add(t.drawTurtle());
+    this.scene.add(this.drawTurtle());
   }
 
   drawString(turnAngle) {
-    let forward = 0;
-    let point, initAngle;
-    point = new THREE.Vector2(0, 0);
-    initAngle = 0;
-    t = new Turtle(point, initAngle);
-    console.log("drawnString >>>", this.drawnString);
+    let forward = 1
     for (let char of this.drawnString) {
-      switch (char) {
+      console.log("drawnString >>>", this.CP);
+      switch (char.toLowerCase()) {
         case "f":
-          forward++;
-          t.forward(forward, true);
+          this.forward(forward, true);
           break;
         case "+":
-          t.turn(turnAngle);
-          forward = 0;
+          this.turnLeft(turnAngle);
           break;
         case "-":
-          t.turn(-turnAngle);
-          forward = 0;
+          this.turnRight(turnAngle);
           break;
         default:
           break;
       }
     }
-    this.scene.add(t.drawTurtle());
+    this.scene.add(this.drawTurtle());
   }
   generateString() {
     const element = document.querySelector(".body");
@@ -104,7 +94,7 @@ class GeneralNavigation extends Turtle {
           console.log("left turn >>>");
           break;
         case "Enter":
-          this.drawString(90);
+          this.drawString(60);
 
         default:
           break;
