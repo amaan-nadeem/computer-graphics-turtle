@@ -14,6 +14,7 @@ class GeneralNavigation extends Turtle {
     for (let i = 0; i < order; i++) {
       modifiedString = []
       for (let j = 0; j < atomString.length; j++) {
+
         switch (atomString[j]) {
           case ruleTerminal:
             modifiedString.push(rule);
@@ -33,6 +34,7 @@ class GeneralNavigation extends Turtle {
     point = new THREE.Vector2(0, 0);
     initAngle = 0;
     t = new Turtle(point, initAngle);
+    console.log("drawnString >>>", this.drawnString);
     for (let char of string) {
       switch (char.toLowerCase()) {
         case "f":
@@ -60,6 +62,7 @@ class GeneralNavigation extends Turtle {
     point = new THREE.Vector2(0, 0);
     initAngle = 0;
     t = new Turtle(point, initAngle);
+    console.log("drawnString >>>", this.drawnString);
     for (let char of this.drawnString) {
       switch (char) {
         case "f":
