@@ -31,7 +31,7 @@ function initialize() {
   const modifiedAtomString = generalNavigation.produceString(map.atom, map, 2);
   console.log("modifiedAtomString >>>", modifiedAtomString);
   generalNavigation.generateString();
-  // generalNavigation.drawStringThroughProducedString(modifiedAtomString, 30);
+  generalNavigation.drawStringThroughProducedString(modifiedAtomString, 30);
 }
 
 function animate() {
