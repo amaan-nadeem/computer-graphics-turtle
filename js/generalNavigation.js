@@ -1,24 +1,14 @@
 class GeneralNavigation extends Turtle {
   static drawnString;
   static scene;
-  static isStorePoints;
-  static storedPoints;
-  static storedPattern;
-  static childParentTree;
-  static childParentTreeIndex;
-  static childParentTreeLevels;
   static levels;
+  static storePointsOnLevels;
 
   constructor(point, initAngle, scene) {
     super(point, initAngle);
     this.drawnString = [];
-    this.isStorePoints = false;
-    this.storedPoints = [];
-    this.storedPattern = [];
-    this.childParentTree = [];
     this.isStorePointsArray = [];
-    this.childParentTreeIndex = -1;
-    this.childParentTreeLevels = 1;
+    this.storePointsOnLevels = {};
     this.levels = 0;
     this.scene = scene;
   }
@@ -41,115 +31,77 @@ class GeneralNavigation extends Turtle {
   }
 
   turnLeft(angle) {
-    this.CD += angle;
+    this.CD -= angle;
   }
   turnRight(angle) {
-    this.CD -= angle;
+    this.CD += angle;
   }
 
   storeBrackets(bracket) {
-    // const levels = this?.childParentTree?.[this.childParentTreeIndex]?.levels;
-    // const childParentTreeIndex = this.childParentTreeIndex;
-    // const currentLevelObj = this.childParentTree?.[childParentTreeIndex];
     if (bracket == "[") {
-      if (this.isStorePoints) {
-        this.storedPoints.push(false);
-        this.levels = this.levels + 1;
-        // this.childParentTree[childParentTreeIndex] = {
-        //   ...currentLevelObj,
-        //   levels: levels + 1,
-        //   actualLevels: levels + 1,
-        // };
-      } else {
-        // console.log("levels >>>", levels);
-        // if (levels > 1) {
-        //   this.childParentTree[childParentTreeIndex] = {
-        //     ...currentLevelObj,
-        //     levels: levels - 1,
-        //     actualLevels: levels + 1,
-        //   };
-        // } else {
-        //   this.childParentTreeIndex = this.childParentTreeIndex + 1;
-        //   this.childParentTree[this.childParentTreeIndex] = {
-        //     bracket: "[",
-        //     levels: 1,
-        //   };
-        // }
-      }
-      console.log("");
-      this.levels = 1;
-      this.isStorePoints = true;
-    } else {
-      this.levels = this.levels - 1;
-      this.isStorePoints = false;
+      this.levels = this.levels + 1;
     }
   }
-
-  savePattern(char) {
-    // const levels = this?.childParentTree?.[this.childParentTreeIndex]?.levels;
-    // const childParentTreeIndex = this.childParentTreeIndex;
-    // const currentLevelObj = this.childParentTree?.[childParentTreeIndex];
-
-    if (this.isStorePoints) {
-      this.storedPoints.push(this.CP);
-      this.storedPattern.push(char);
-
-      // if (!currentLevelObj[levels]) {
-      //   this.childParentTree[childParentTreeIndex][levels] = [char];
-      // } else {
-      //   this.childParentTree[childParentTreeIndex] = {
-      //     ...currentLevelObj,
-      //     [levels]: [...currentLevelObj[levels], char],
-      //   };
-      // }
+  savePattern() {
+    const levels = this.levels;
+    // console.log("levels >>>", {
+    //   levels: this.levels,
+    //   CD: this.CD
+    // });
+    for (let i = 1; i <= levels; i++) {
+      if (!this.storePointsOnLevels[i]) {
+        this.storePointsOnLevels[i] = [{ CP: this.CP, CD: this.CD }];
+      } else {
+        this.storePointsOnLevels[i].push({ CP: this.CP, CD: this.CD });
+      }
     }
   }
   restorePattern() {
-    // console.log("this.storedPoints.slice(0, i)", this.storedPoints);
-    let isNotEmpty = false;
-    for (let i = this.storedPoints.length - 1; i > 0; i--) {
-      const point = this.storedPoints[i];
-      if (!point) {
-        const storedPoints = [...this.storedPoints.slice(0, i)];
-        this.storedPoints = [...storedPoints];
-        this.storedPattern = this.storedPattern.slice(0, i);
-        // console.log("point index >>>", {
-        //   storedPoints: JSON.parse(JSON.stringify(this.storedPoints)),
-        // });
-        isNotEmpty = true;
-        // break;
-      } else {
-        this.path.lineTo(point.x, point.y);
-        this.CP = point;
-      }
+    for (
+      let i = this.storePointsOnLevels[this.levels].length - 1;
+      i >= 0;
+      i--
+    ) {
+      const point = this.storePointsOnLevels[this.levels][i].CP;
+      const angle = this.storePointsOnLevels[this.levels][i].CD;
+      this.path.lineTo(point.x, point.y);
+      this.CP = point;
+      this.CD = angle;
     }
-    // console.log("this.storedPoints", {
-    //   storedPoints: JSON.parse(JSON.stringify(this.storedPoints)),
-    //   storedPattern: JSON.parse(JSON.stringify(this.storedPattern)),
-    //   childParentTree: JSON.parse(JSON.stringify(this.childParentTree)),
+
+    // console.log("levels >>>", {
+    //   levels: this.levels,
+    //   storePointsOnLevels: JSON.parse(JSON.stringify(this.storePointsOnLevels)),
     // });
-    if (!isNotEmpty) {
-      this.storedPoints = [];
-      this.storedPattern = [];
-    }
+
+    delete this.storePointsOnLevels[this.levels];
+    this.levels = this.levels - 1;
   }
   drawStringThroughProducedString(string, turnAngle) {
-    let forward = 1;
+    let forward = 0.5;
 
     for (let index in string) {
       const char = string[index];
       switch (char.toLowerCase()) {
         case "f":
-          this.forward(forward, true);
           this.savePattern(char);
+          this.forward(forward, true);
+          break;
+        case "x":
+          this.savePattern(char);
+          this.forward(forward, true);
+          break;
+        case "y":
+          this.savePattern(char);
+          this.forward(forward, true);
           break;
         case "+":
-          this.turnLeft(turnAngle);
           this.savePattern(char);
+          this.turnLeft(turnAngle);
           break;
         case "-":
-          this.turnRight(turnAngle);
           this.savePattern(char);
+          this.turnRight(turnAngle);
           break;
         case "[":
           this.storeBrackets(char);
@@ -162,9 +114,9 @@ class GeneralNavigation extends Turtle {
           break;
       }
     }
-    console.log("this >>>", {
-      levels: this.levels,
-    });
+    // console.log("this >>>", {
+    //   levels: this.levels,
+    // });
     this.scene.add(this.drawTurtle());
   }
 
