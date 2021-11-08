@@ -103,7 +103,6 @@ function initialize() {
     map.order
   );
   console.log("modifiedAtomString >>>", modifiedAtomString);
-  generalNavigation.generateString();
 
   generalNavigation.drawStringThroughProducedString(
     modifiedAtomString,
