@@ -18,14 +18,15 @@ function initialize() {
   point = new THREE.Vector2(0, 0);
   initAngle = 90;
 
-  // Tree
+  // Trees
+
   // const map = {
   //   atom: "F+F",
   //   rule: {},
   //   F: "FF-[-F+F+F]+[+F-F-F]",
   //   angle: 30,
   //   startAngle: 90,
-  //   order: 5,
+  //   order: 3,
   // };
 
   // const map = {
@@ -38,6 +39,25 @@ function initialize() {
   // };
 
   // const map = {
+  //   atom: "F",
+  //   rule: {},
+  //   F: "F[+F[+F][-F]F][-F[+F][-F]F]F[+F][-F]F",
+  //   angle: 30,
+  //   order: 3
+  // };
+
+  // const map = {
+  //   atom: "X",
+  //   rule: {},
+  //   X: "F[+X][-X]FX",
+  //   F: "FF",
+  //   angle: 25,
+  //   order: 4
+  // };
+
+  // Binary Tree
+
+  // const map = {
   //   atom: "X",
   //   rule: {},
   //   X: "F[-X][+X]",
@@ -45,6 +65,8 @@ function initialize() {
   //   startAngle: 45,
   //   order: 5,
   // };
+
+  // SnowFlake
 
   // const map = {
   //   atom: "F++F++F",
@@ -54,20 +76,7 @@ function initialize() {
   //   order: 4
   // };
 
-  // const map = {
-  //   atom: "F",
-  //   rule: {},
-  //   F: "F[+F[+F][-F]F][-F[+F][-F]F]F[+F][-F]F",
-  //   angle: 30,
-  // };
-
-  // const map = {
-  //   atom: "X",
-  //   rule: {},
-  //   X: "F[+X][-X]FX",
-  //   F: "FF",
-  //   angle: 25,
-  // };
+  // Dragon
 
   // const map = {
   //   atom: "FX",
@@ -78,23 +87,27 @@ function initialize() {
   //   order: 9
   // };
 
-  const map = {
-    atom: "X",
-    rule: {},
-    F: "FF",
-    X: "F-[[X]+X]+F[+FX]-X",
-    angle: 22.5,
-    order: 5,
-  };
+  // Left Recursive Fuzzy tree
 
   // const map = {
-  //   atom: "F",
+  //   atom: "X",
   //   rule: {},
-  //   X: "-F+X+F-",
-  //   F: "+X-F-X+",
-  //   angle: 60,
-  //   order: 7
+  //   F: "FF",
+  //   X: "F-[[X]+X]+F[+FX]-X",
+  //   angle: 22.5,
+  //   order: 5,
   // };
+
+  // Sierpinski triangle
+
+  const map = {
+    atom: "F",
+    rule: {},
+    X: "-F+X+F-",
+    F: "+X-F-X+",
+    angle: 60,
+    order: 7,
+  };
 
   const generalNavigation = new GeneralNavigation(point, initAngle, scene);
   const modifiedAtomString = generalNavigation.produceString(
@@ -108,6 +121,14 @@ function initialize() {
     modifiedAtomString,
     map.angle
   );
+
+  // This is Commentted out code of Fractal Curve Which is not working currently having problem in rendering properly
+
+  // const pointA = new THREE.Vector2(0, 0);
+  // const pointB = new THREE.Vector2(0, 0);
+  // const fractalCurve = new FractalCurve(point, initAngle, 4, 3, scene);
+
+  // fractalCurve.generateFractalCurve(pointA, pointB, 4);
 }
 
 function animate() {
