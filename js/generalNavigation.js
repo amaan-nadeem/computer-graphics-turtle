@@ -44,10 +44,12 @@ class GeneralNavigation extends Turtle {
     const levels = this.levels;
 
     for (let i = 1; i <= levels; i++) {
-      if (!this.storePointsOnLevels[i]) {
-        this.storePointsOnLevels[i] = [{ CP: this.CP, CD: this.CD }];
-      } else {
-        this.storePointsOnLevels[i].push({ CP: this.CP, CD: this.CD });
+      if(levels === i){
+        if (!this.storePointsOnLevels[i]) {
+          this.storePointsOnLevels[i] = [{ CP: this.CP, CD: this.CD }];
+        } else {
+          this.storePointsOnLevels[i].push({ CP: this.CP, CD: this.CD });
+        }
       }
     }
   }

@@ -20,14 +20,14 @@ function initialize() {
 
   // Trees
 
-  // const map = {
-  //   atom: "F+F",
-  //   rule: {},
-  //   F: "FF-[-F+F+F]+[+F-F-F]",
-  //   angle: 30,
-  //   startAngle: 90,
-  //   order: 3,
-  // };
+  const map = {
+    atom: "F+F",
+    rule: {},
+    F: "FF-[-F+F+F]+[+F-F-F]",
+    angle: 30,
+    startAngle: 90,
+    order: 3,
+  };
 
   // const map = {
   //   atom: "F",
@@ -100,14 +100,14 @@ function initialize() {
 
   // Sierpinski triangle
 
-  const map = {
-    atom: "F",
-    rule: {},
-    X: "-F+X+F-",
-    F: "+X-F-X+",
-    angle: 60,
-    order: 7,
-  };
+  // const map = {
+  //   atom: "F",
+  //   rule: {},
+  //   X: "-F+X+F-",
+  //   F: "+X-F-X+",
+  //   angle: 60,
+  //   order: 7,
+  // };
 
   const generalNavigation = new GeneralNavigation(point, initAngle, scene);
   const modifiedAtomString = generalNavigation.produceString(
@@ -115,12 +115,12 @@ function initialize() {
     map,
     map.order
   );
-  console.log("modifiedAtomString >>>", modifiedAtomString);
 
   generalNavigation.drawStringThroughProducedString(
     modifiedAtomString,
     map.angle
   );
+  
 
   // This is Commentted out code of Fractal Curve Which is not working currently having problem in rendering properly
 
